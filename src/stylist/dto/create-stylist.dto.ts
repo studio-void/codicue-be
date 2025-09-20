@@ -7,8 +7,7 @@ import {
   MinLength,
   IsOptional,
   IsArray,
-  IsNumber,
-  IsEnum,
+  IsIn,
 } from 'class-validator';
 
 export enum Style {
@@ -24,10 +23,10 @@ export enum Style {
   BOHEMIAN = 'BOHEMIAN',
 }
 
-export class CreateUserDto {
+export class CreateStylistDto {
   @ApiProperty({
-    example: 'user@example.com',
-    description: 'User email address (must be unique)',
+    example: 'stylist@example.com',
+    description: 'Stylist email address (must be unique)',
     type: String,
   })
   @IsNotEmpty()
@@ -38,7 +37,7 @@ export class CreateUserDto {
     example: 'password123',
     minLength: 8,
     maxLength: 32,
-    description: 'User password (8~32 characters)',
+    description: 'Stylist password (8~32 characters)',
     type: String,
   })
   @IsString()
@@ -47,8 +46,8 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty({
-    example: 'John Doe',
-    description: 'User real name',
+    example: 'Jane Smith',
+    description: 'Stylist real name',
     type: String,
   })
   @IsNotEmpty()
@@ -56,32 +55,32 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({
-    example: 170.5,
-    description: 'Height in centimeters',
-    type: Number,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  height: number;
-
-  @ApiProperty({
-    example: 65.2,
-    description: 'Weight in kilograms',
-    type: Number,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  weight: number;
-
-  @ApiProperty({
-    example: ['MINIMAL', 'CASUAL'],
-    description: 'Preferred fashion styles',
+    example: ['MINIMAL', 'CLASSIC'],
+    description: 'Specialty fashion styles',
     enum: Style,
     isArray: true,
     required: false,
   })
   @IsOptional()
   @IsArray()
-  @IsEnum(Style, { each: true })
-  preferredStyle?: Style[];
+  @IsIn(Object.values(Style), { each: true })
+  specialtyStyles?: Style[];
+
+  @ApiProperty({
+    example: 'Professional fashion stylist with 5 years of experience.',
+    description: 'Stylist introduction',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  introduction?: string;
+
+  @ApiProperty({
+    example: 'https://example.com/profile.jpg',
+    description: 'Profile image URL',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  profileImageUrl?: string;
 }

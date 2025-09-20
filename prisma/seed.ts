@@ -12,7 +12,7 @@ async function main() {
       email: 'admin@example.com',
       name: '관리자',
       password: adminPassword,
-      isAdmin: true,
+      // isAdmin: true,
     },
   });
 
@@ -21,7 +21,7 @@ async function main() {
       email: 'user@example.com',
       name: '일반유저',
       password: userPassword,
-      isAdmin: false,
+      // isAdmin: false,
     },
   });
 
