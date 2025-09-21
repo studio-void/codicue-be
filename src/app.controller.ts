@@ -10,8 +10,8 @@ export class AppController {
   @Get()
   root() {
     return {
-      name: 'Template Backend',
-      description: 'A backend service.',
+      name: 'Codicue Backend',
+      description: 'A Codicue service.',
       publishedAt: new Date().toISOString(),
       version: 'v1.0.0',
     };

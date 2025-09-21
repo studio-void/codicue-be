@@ -6,13 +6,14 @@ async function main() {
 
   const adminPassword = await bcrypt.hash('admin1234', 10);
   const userPassword = await bcrypt.hash('user1234', 10);
+  const stylistPassword = await bcrypt.hash('stylist1234', 10);
 
   await prisma.user.create({
     data: {
       email: 'admin@example.com',
       name: '관리자',
       password: adminPassword,
-      isAdmin: true,
+      // isAdmin: true,
     },
   });
 
@@ -21,7 +22,35 @@ async function main() {
       email: 'user@example.com',
       name: '일반유저',
       password: userPassword,
-      isAdmin: false,
+      // isAdmin: false,
+    },
+  });
+
+  await prisma.stylist.create({
+    data: {
+      email: 'stylist@example.com',
+      name: '김스타일',
+      password: stylistPassword,
+      introduction:
+        '10년 경력의 전문 스타일리스트입니다. 개인의 매력을 최대한 끌어내는 스타일링을 제안합니다.',
+      specialtyStyles: ['CLASSIC', 'FORMAL', 'CASUAL'],
+      isVerified: true,
+      rating: 4.8,
+      reviewCount: 127,
+    },
+  });
+
+  await prisma.stylist.create({
+    data: {
+      email: 'stylist2@example.com',
+      name: '이패션',
+      password: stylistPassword,
+      introduction:
+        '트렌디한 스타일을 추구하는 젊은 스타일리스트입니다. MZ세대의 감성을 잘 이해합니다.',
+      specialtyStyles: ['STREET', 'CASUAL', 'MINIMAL'],
+      isVerified: true,
+      rating: 4.6,
+      reviewCount: 89,
     },
   });
 

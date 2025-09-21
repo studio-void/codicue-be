@@ -1,8 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+import { StylistService } from '../stylist/stylist.service';
 import { Payload } from './jwt/jwt.payload';
 import { LoginDto } from './dto/login.dto';
+import { StylistLoginDto } from './dto/stylist-login.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -10,6 +12,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UserService,
+    private stylistService: StylistService,
   ) {}
 
   async login({ email, password }: LoginDto) {
@@ -24,11 +27,41 @@ export class AuthService {
       id: user.id,
       email: user.email,
       name: user.name,
-      isAdmin: user.isAdmin,
+      userType: 'user',
     };
 
     return {
       accessToken: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    };
+  }
+
+  async stylistLogin({ email, password }: StylistLoginDto) {
+    const stylist = await this.stylistService.findByEmail(email);
+
+    const isPasswordValid = await bcrypt.compare(password, stylist.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Password is incorrect');
+    }
+
+    const payload: Payload = {
+      id: stylist.id,
+      email: stylist.email,
+      name: stylist.name,
+      userType: 'stylist',
+    };
+
+    return {
+      accessToken: this.jwtService.sign(payload),
+      stylist: {
+        id: stylist.id,
+        email: stylist.email,
+        name: stylist.name,
+      },
     };
   }
 

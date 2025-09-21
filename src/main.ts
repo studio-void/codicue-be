@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { swaggerConfig } from './config/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -38,9 +39,9 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Template API')
-    .setDescription('Template API documentation')
-    .setVersion('1.0')
+    .setTitle(swaggerConfig.TITLE)
+    .setDescription(swaggerConfig.DESCRIPTION)
+    .setVersion(swaggerConfig.VERSION)
     .addBearerAuth(
       {
         type: 'http',
@@ -49,7 +50,7 @@ async function bootstrap() {
         name: 'Authorization',
         in: 'header',
       },
-      'jwt',
+      swaggerConfig.BEARER_AUTH_NAME,
     )
     .build();
 
@@ -62,7 +63,7 @@ async function bootstrap() {
   );
 
   SwaggerModule.setup(
-    'api',
+    swaggerConfig.API_PREFIX,
     app,
     () => SwaggerModule.createDocument(app, config),
     {

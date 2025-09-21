@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
+import { StylistModule } from '../stylist/stylist.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigType } from '@nestjs/config';
@@ -23,6 +24,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
       }),
     }),
     UserModule,
+    StylistModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
