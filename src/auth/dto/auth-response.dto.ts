@@ -42,3 +42,38 @@ export class LogoutResponseDto {
   })
   message: string;
 }
+
+export class StylistLoginResponseDto {
+  @ApiProperty({
+    description: 'JWT 액세스 토큰',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
+  accessToken: string;
+
+  @ApiProperty({
+    description: '로그인한 스타일리스트 정보',
+    type: 'object',
+    properties: {
+      id: {
+        type: 'number',
+        example: 1,
+        description: '스타일리스트 ID',
+      },
+      email: {
+        type: 'string',
+        example: 'stylist@example.com',
+        description: '스타일리스트 이메일',
+      },
+      name: {
+        type: 'string',
+        example: '김스타일',
+        description: '스타일리스트 이름',
+      },
+    },
+  })
+  stylist: {
+    id: number;
+    email: string;
+    name: string;
+  };
+}

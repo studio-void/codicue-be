@@ -71,7 +71,7 @@ export class StylistService {
   async findByEmail(email: string) {
     const stylist = await this.prisma.stylist.findUnique({
       where: { email },
-      select: { id: true, email: true, password: true },
+      select: { id: true, email: true, password: true, name: true },
     });
 
     if (!stylist) {
@@ -81,13 +81,13 @@ export class StylistService {
     return stylist;
   }
 
-  async update(id: number, updateStylistDto: UpdateStylistDto) {
+  async update(userId: number, updateStylistDto: UpdateStylistDto) {
     const existingStylist = await this.prisma.stylist.findUnique({
-      where: { id },
+      where: { id: userId },
     });
 
     if (!existingStylist) {
-      throw new NotFoundException(`Stylist with ID ${id} not found`);
+      throw new NotFoundException(`Stylist with ID ${userId} not found`);
     }
 
     const data: UpdateStylistDto = { ...updateStylistDto };
@@ -96,23 +96,23 @@ export class StylistService {
     }
 
     return await this.prisma.stylist.update({
-      where: { id },
+      where: { id: userId },
       data,
       select: this.getBasicStylistSelect(),
     });
   }
 
-  async delete(id: number) {
+  async delete(userId: number) {
     const existingStylist = await this.prisma.stylist.findUnique({
-      where: { id },
+      where: { id: userId },
     });
 
     if (!existingStylist) {
-      throw new NotFoundException(`Stylist with ID ${id} not found`);
+      throw new NotFoundException(`Stylist with ID ${userId} not found`);
     }
 
     return await this.prisma.stylist.delete({
-      where: { id },
+      where: { id: userId },
       select: this.getBasicStylistSelect(),
     });
   }

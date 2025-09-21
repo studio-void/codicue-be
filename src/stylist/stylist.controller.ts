@@ -25,6 +25,7 @@ import {
   StylistResponseDto,
   ReviewResponseDto,
 } from './dto/stylist-response.dto';
+import { swaggerConfig } from '../config/swagger.config';
 
 @ApiTags('stylists')
 @Controller('stylists')
@@ -64,6 +65,27 @@ export class StylistController {
   }
 
   @ApiOperation({
+    summary: '내 스타일리스트 정보 조회',
+    description: '현재 로그인한 스타일리스트의 정보를 반환합니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '스타일리스트 정보 반환',
+    type: StylistResponseDto,
+  })
+  @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
+  @ApiResponse({
+    status: 404,
+    description: '스타일리스트를 찾을 수 없음',
+  })
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async findMe(@UserId() userId: number) {
+    return await this.stylistService.findById(userId);
+  }
+
+  @ApiOperation({
     summary: '스타일리스트 등록',
     description: '새로운 스타일리스트를 등록합니다.',
   })
@@ -79,46 +101,48 @@ export class StylistController {
   }
 
   @ApiOperation({
-    summary: '스타일리스트 정보 수정',
-    description: '스타일리스트의 정보를 수정합니다.',
+    summary: '내 스타일리스트 정보 수정',
+    description: '현재 로그인한 스타일리스트의 정보를 수정합니다.',
   })
   @ApiResponse({
     status: 200,
     description: '스타일리스트 정보 수정 성공',
     type: StylistResponseDto,
   })
+  @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({
     status: 404,
-    description: '해당 ID의 스타일리스트를 찾을 수 없음',
+    description: '스타일리스트를 찾을 수 없음',
   })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
+  @Patch('me')
+  async updateMe(
+    @UserId() userId: number,
     @Body() updateStylistDto: UpdateStylistDto,
   ) {
-    return await this.stylistService.update(id, updateStylistDto);
+    return this.stylistService.update(userId, updateStylistDto);
   }
 
   @ApiOperation({
-    summary: '스타일리스트 삭제',
-    description: '스타일리스트를 삭제합니다.',
+    summary: '내 스타일리스트 계정 삭제',
+    description: '현재 로그인한 스타일리스트의 계정을 삭제합니다.',
   })
   @ApiResponse({
     status: 200,
     description: '스타일리스트 삭제 성공',
     type: StylistResponseDto,
   })
+  @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({
     status: 404,
-    description: '해당 ID의 스타일리스트를 찾을 수 없음',
+    description: '스타일리스트를 찾을 수 없음',
   })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.stylistService.delete(id);
+  @Delete('me')
+  async deleteMe(@UserId() userId: number) {
+    return this.stylistService.delete(userId);
   }
 
   @ApiOperation({
@@ -154,7 +178,7 @@ export class StylistController {
     status: 404,
     description: '해당 ID의 스타일리스트를 찾을 수 없음',
   })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Post(':id/reviews')
   async createReview(

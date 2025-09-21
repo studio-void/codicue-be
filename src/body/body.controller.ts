@@ -19,9 +19,10 @@ import { UserId } from '../user/user.decorator';
 import { CreateBodyDto } from './dto/create-body.dto';
 import { UpdateBodyDto } from './dto/update-body.dto';
 import { BodyResponseDto } from './dto/body-response.dto';
+import { swaggerConfig } from '../config/swagger.config';
 
 @ApiTags('body')
-@ApiBearerAuth('jwt')
+@ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
 @UseGuards(JwtAuthGuard)
 @Controller('body')
 export class BodyController {

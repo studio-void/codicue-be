@@ -23,6 +23,7 @@ import {
   ChatResponseDto,
   MessageResponseDto,
 } from './dto/chat-response.dto';
+import { swaggerConfig } from '../config/swagger.config';
 
 @ApiTags('chat')
 @Controller('chat')
@@ -40,7 +41,7 @@ export class ChatController {
     type: [ChatListResponseDto],
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Get('user/chats')
   async getUserChats(@UserId() userId: number) {
@@ -51,10 +52,14 @@ export class ChatController {
     summary: '사용자 채팅방 상세 조회',
     description: '특정 채팅방의 모든 메시지를 포함한 상세 정보를 반환합니다.',
   })
-  @ApiResponse({ status: 200, description: '채팅방 정보 반환', type: ChatResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: '채팅방 정보 반환',
+    type: ChatResponseDto,
+  })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Get('user/chats/:id')
   async getChatByIdForUser(
@@ -69,10 +74,14 @@ export class ChatController {
     description:
       '스타일리스트와의 새로운 채팅방을 생성하거나 기존 채팅방을 반환합니다.',
   })
-  @ApiResponse({ status: 201, description: '채팅방 생성 성공', type: ChatResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: '채팅방 생성 성공',
+    type: ChatResponseDto,
+  })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '스타일리스트를 찾을 수 없음' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Post('user/chats')
   async createChat(
@@ -89,10 +98,14 @@ export class ChatController {
     summary: '사용자 메시지 전송',
     description: '채팅방에 사용자 메시지를 전송합니다.',
   })
-  @ApiResponse({ status: 201, description: '메시지 전송 성공', type: MessageResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: '메시지 전송 성공',
+    type: MessageResponseDto,
+  })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Post('user/chats/:id/messages')
   async sendMessageFromUser(
@@ -112,9 +125,13 @@ export class ChatController {
     summary: '스타일리스트 채팅방 목록 조회',
     description: '현재 스타일리스트의 모든 채팅방 목록을 반환합니다.',
   })
-  @ApiResponse({ status: 200, description: '채팅방 목록 반환', type: [ChatListResponseDto] })
+  @ApiResponse({
+    status: 200,
+    description: '채팅방 목록 반환',
+    type: [ChatListResponseDto],
+  })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Get('stylist/chats')
   async getStylistChats(@UserId() stylistId: number) {
@@ -125,10 +142,14 @@ export class ChatController {
     summary: '스타일리스트 채팅방 상세 조회',
     description: '특정 채팅방의 모든 메시지를 포함한 상세 정보를 반환합니다.',
   })
-  @ApiResponse({ status: 200, description: '채팅방 정보 반환', type: ChatResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: '채팅방 정보 반환',
+    type: ChatResponseDto,
+  })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Get('stylist/chats/:id')
   async getChatByIdForStylist(
@@ -142,10 +163,14 @@ export class ChatController {
     summary: '스타일리스트 메시지 전송',
     description: '채팅방에 스타일리스트 메시지를 전송합니다.',
   })
-  @ApiResponse({ status: 201, description: '메시지 전송 성공', type: MessageResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: '메시지 전송 성공',
+    type: MessageResponseDto,
+  })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
-  @ApiBearerAuth('jwt')
+  @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
   @UseGuards(JwtAuthGuard)
   @Post('stylist/chats/:id/messages')
   async sendMessageFromStylist(
