@@ -24,6 +24,7 @@ import {
   PointHistoryResponseDto,
 } from './dto/user-response.dto';
 import { swaggerConfig } from '../config/swagger.config';
+import { UserTypeGuard } from '../auth/guards/user-type.guard';
 
 @Controller('user')
 export class UserController {
@@ -42,7 +43,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '해당 ID의 사용자를 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Get()
   async me(@UserId() userId: number) {
     return await this.userService.findById(userId);
@@ -76,7 +77,7 @@ export class UserController {
   @ApiResponse({ status: 400, description: '잘못된 입력 데이터' })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '해당 ID의 사용자를 찾을 수 없음' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Patch()
   async update(@UserId() userId: number, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.update(userId, updateUserDto);
@@ -94,7 +95,7 @@ export class UserController {
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '해당 ID의 사용자를 찾을 수 없음' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Delete()
   async remove(@UserId() userId: number) {
     return await this.userService.delete(userId);
@@ -111,7 +112,7 @@ export class UserController {
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Get('points')
   async getPointHistory(@UserId() userId: number) {
     return await this.userService.getPointHistory(userId);
@@ -131,7 +132,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '사용자를 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Post('points')
   async changePoints(
     @UserId() userId: number,
@@ -153,7 +154,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '사용자를 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Get('items')
   async getUserItems(@UserId() userId: number) {
     return await this.userService.getUserItems(userId);
@@ -171,7 +172,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '아이템을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Get('items/:id')
   async getUserItemById(
     @UserId() userId: number,
@@ -192,7 +193,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '사용자를 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Post('items')
   async createUserItem(
     @UserId() userId: number,
@@ -213,7 +214,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '아이템을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Patch('items/:id')
   async updateUserItem(
     @UserId() userId: number,
@@ -239,7 +240,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '아이템을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Delete('items/:id')
   async deleteUserItem(
     @UserId() userId: number,

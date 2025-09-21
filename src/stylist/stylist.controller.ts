@@ -27,6 +27,7 @@ import {
   ReviewResponseDto,
 } from './dto/stylist-response.dto';
 import { swaggerConfig } from '../config/swagger.config';
+import { UserTypeGuard } from '../auth/guards/user-type.guard';
 
 @ApiTags('stylists')
 @Controller('stylists')
@@ -62,7 +63,7 @@ export class StylistController {
     description: '스타일리스트를 찾을 수 없음',
   })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @Get('me')
   async findMe(@UserId() userId: number) {
     return await this.stylistService.findByIdPrivate(userId);
@@ -83,7 +84,7 @@ export class StylistController {
     description: '스타일리스트를 찾을 수 없음',
   })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @Patch('me')
   async updateMe(
     @UserId() userId: number,
@@ -107,7 +108,7 @@ export class StylistController {
     description: '스타일리스트를 찾을 수 없음',
   })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @Delete('me')
   async deleteMe(@UserId() userId: number) {
     return this.stylistService.delete(userId);
@@ -180,7 +181,7 @@ export class StylistController {
     description: '해당 ID의 스타일리스트를 찾을 수 없음',
   })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Post(':id/reviews')
   async createReview(
     @Param('id', ParseIntPipe) id: number,

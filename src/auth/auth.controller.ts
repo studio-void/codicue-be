@@ -22,6 +22,7 @@ import {
   StylistLoginResponseDto,
 } from './dto/auth-response.dto';
 import { swaggerConfig } from '../config/swagger.config';
+import { UserTypeGuard } from './guards/user-type.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -56,7 +57,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @HttpCode(200)
   @Delete('logout')
   logout() {
@@ -91,7 +92,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @HttpCode(200)
   @Delete('stylist/logout')
   stylistLogout() {

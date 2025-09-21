@@ -24,6 +24,7 @@ import {
   MessageResponseDto,
 } from './dto/chat-response.dto';
 import { swaggerConfig } from '../config/swagger.config';
+import { UserTypeGuard } from '../auth/guards/user-type.guard';
 
 @ApiTags('chat')
 @Controller('chat')
@@ -42,7 +43,7 @@ export class ChatController {
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Get('user/chats')
   async getUserChats(@UserId() userId: number) {
     return await this.chatService.getUserChats(userId);
@@ -60,7 +61,7 @@ export class ChatController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Get('user/chats/:id')
   async getChatByIdForUser(
     @Param('id', ParseIntPipe) chatId: number,
@@ -82,7 +83,7 @@ export class ChatController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '스타일리스트를 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Post('user/chats')
   async createChat(
     @UserId() userId: number,
@@ -106,7 +107,7 @@ export class ChatController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('user'))
   @Post('user/chats/:id/messages')
   async sendMessageFromUser(
     @Param('id', ParseIntPipe) chatId: number,
@@ -132,7 +133,7 @@ export class ChatController {
   })
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @Get('stylist/chats')
   async getStylistChats(@UserId() stylistId: number) {
     return await this.chatService.getStylistChats(stylistId);
@@ -150,7 +151,7 @@ export class ChatController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @Get('stylist/chats/:id')
   async getChatByIdForStylist(
     @Param('id', ParseIntPipe) chatId: number,
@@ -171,7 +172,7 @@ export class ChatController {
   @ApiResponse({ status: 401, description: '인증 실패(JWT 누락 또는 만료)' })
   @ApiResponse({ status: 404, description: '채팅방을 찾을 수 없음' })
   @ApiBearerAuth(swaggerConfig.BEARER_AUTH_NAME)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, UserTypeGuard('stylist'))
   @Post('stylist/chats/:id/messages')
   async sendMessageFromStylist(
     @Param('id', ParseIntPipe) chatId: number,
