@@ -9,12 +9,6 @@ export class StylistResponseDto {
   id: number;
 
   @ApiProperty({
-    description: '이메일',
-    example: 'stylist@example.com',
-  })
-  email: string;
-
-  @ApiProperty({
     description: '이름',
     example: '김스타일',
   })
@@ -71,6 +65,14 @@ export class StylistResponseDto {
     example: '2024-01-01T00:00:00.000Z',
   })
   updatedAt: Date;
+}
+
+export class StylistPrivateResponseDto extends StylistResponseDto {
+  @ApiProperty({
+    description: '이메일',
+    example: 'stylist@example.com',
+  })
+  email: string;
 }
 
 export class ReviewResponseDto {

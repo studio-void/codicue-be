@@ -30,9 +30,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         throw new UnauthorizedException('User not found');
       }
     } else if (payload.userType === 'stylist') {
-      try {
-        await this.stylistService.findById(payload.id);
-      } catch {
+      const exists = await this.stylistService.exists(payload.id);
+      if (!exists) {
         throw new UnauthorizedException('Stylist not found');
       }
     } else {

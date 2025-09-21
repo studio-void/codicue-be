@@ -16,7 +16,7 @@ export type StylistSelect = Partial<Record<keyof Stylist, true>>;
 export class StylistService {
   constructor(private prisma: PrismaService) {}
 
-  // 민감한 정보를 제외한 기본 필드 선택
+  // 민감한 정보를 제외한 기본 필드 선택 (공개용)
   private getBasicStylistSelect(): StylistSelect {
     return {
       id: true,
@@ -29,6 +29,14 @@ export class StylistService {
       specialtyStyles: true,
       createdAt: true,
       updatedAt: true,
+    };
+  }
+
+  // 개인 정보 포함 필드 선택 (본인 전용)
+  private getPrivateStylistSelect(): StylistSelect {
+    return {
+      ...this.getBasicStylistSelect(),
+      email: true,
     };
   }
 
@@ -68,6 +76,27 @@ export class StylistService {
     return stylist;
   }
 
+  async findByIdPrivate(id: number) {
+    const stylist = await this.prisma.stylist.findUnique({
+      where: { id },
+      select: this.getPrivateStylistSelect(),
+    });
+
+    if (!stylist) {
+      throw new NotFoundException(`Stylist with ID ${id} not found`);
+    }
+
+    return stylist;
+  }
+
+  async exists(id: number): Promise<boolean> {
+    const stylist = await this.prisma.stylist.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    return !!stylist;
+  }
+
   async findByEmail(email: string) {
     const stylist = await this.prisma.stylist.findUnique({
       where: { email },
@@ -98,7 +127,7 @@ export class StylistService {
     return await this.prisma.stylist.update({
       where: { id: userId },
       data,
-      select: this.getBasicStylistSelect(),
+      select: this.getPrivateStylistSelect(),
     });
   }
 
@@ -113,7 +142,7 @@ export class StylistService {
 
     return await this.prisma.stylist.delete({
       where: { id: userId },
-      select: this.getBasicStylistSelect(),
+      select: this.getPrivateStylistSelect(),
     });
   }
 
