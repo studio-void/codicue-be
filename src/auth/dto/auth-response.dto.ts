@@ -41,6 +41,18 @@ export class LogoutResponseDto {
     example: '로그아웃이 완료되었습니다',
   })
   message: string;
+
+  @ApiProperty({
+    description: '요청 성공 여부',
+    example: true,
+  })
+  success: boolean;
+
+  @ApiProperty({
+    description: '응답 타임스탬프(ISO8601)',
+    example: '2025-09-21T12:34:56.000Z',
+  })
+  timestamp: string;
 }
 
 export class StylistLoginResponseDto {
