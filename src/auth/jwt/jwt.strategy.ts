@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigType } from '@nestjs/config';
@@ -23,19 +28,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: Payload): Promise<Validated> {
     // userType에 따라 적절한 서비스에서 사용자 확인
-    if (payload.userType === 'user') {
-      try {
-        await this.userService.readById(payload.id);
-      } catch {
-        throw new UnauthorizedException('User not found');
+    try {
+      if (payload.userType === 'user') {
+        await this.userService.findById(payload.id);
+      } else if (payload.userType === 'stylist') {
+        await this.stylistService.findById(payload.id);
+      } else {
+        throw new UnauthorizedException('Unauthorized');
       }
-    } else if (payload.userType === 'stylist') {
-      const exists = await this.stylistService.exists(payload.id);
-      if (!exists) {
-        throw new UnauthorizedException('Stylist not found');
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new UnauthorizedException('Unauthorized');
       }
-    } else {
-      throw new UnauthorizedException('Invalid user type');
+      throw err;
     }
 
     return {

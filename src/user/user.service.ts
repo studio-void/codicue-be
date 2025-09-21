@@ -101,7 +101,7 @@ export class UserService {
     });
   }
 
-  async readById(id: number) {
+  async findById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       select: this.getBasicUserSelect(),

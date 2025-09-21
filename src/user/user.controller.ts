@@ -45,7 +45,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async me(@UserId() userId: number) {
-    return await this.userService.readById(userId);
+    return await this.userService.findById(userId);
   }
 
   @ApiOperation({
