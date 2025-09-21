@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Style } from '@prisma/client';
 import {
   IsEmail,
   IsNotEmpty,
@@ -10,19 +11,6 @@ import {
   IsNumber,
   IsEnum,
 } from 'class-validator';
-
-export enum Style {
-  MINIMAL = 'MINIMAL',
-  EFFORTLESS = 'EFFORTLESS',
-  STREET = 'STREET',
-  HIPHOP = 'HIPHOP',
-  CLASSIC = 'CLASSIC',
-  ROMANTIC = 'ROMANTIC',
-  CASUAL = 'CASUAL',
-  FORMAL = 'FORMAL',
-  VINTAGE = 'VINTAGE',
-  BOHEMIAN = 'BOHEMIAN',
-}
 
 export class CreateUserDto {
   @ApiProperty({

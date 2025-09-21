@@ -91,6 +91,8 @@ export class StylistController {
     status: 404,
     description: '해당 ID의 스타일리스트를 찾을 수 없음',
   })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -112,6 +114,8 @@ export class StylistController {
     status: 404,
     description: '해당 ID의 스타일리스트를 찾을 수 없음',
   })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.stylistService.delete(id);

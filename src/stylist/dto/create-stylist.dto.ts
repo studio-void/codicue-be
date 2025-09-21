@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Style } from '@prisma/client';
 import {
   IsEmail,
   IsNotEmpty,
@@ -7,21 +8,8 @@ import {
   MinLength,
   IsOptional,
   IsArray,
-  IsIn,
+  IsEnum,
 } from 'class-validator';
-
-export enum Style {
-  MINIMAL = 'MINIMAL',
-  EFFORTLESS = 'EFFORTLESS',
-  STREET = 'STREET',
-  HIPHOP = 'HIPHOP',
-  CLASSIC = 'CLASSIC',
-  ROMANTIC = 'ROMANTIC',
-  CASUAL = 'CASUAL',
-  FORMAL = 'FORMAL',
-  VINTAGE = 'VINTAGE',
-  BOHEMIAN = 'BOHEMIAN',
-}
 
 export class CreateStylistDto {
   @ApiProperty({
@@ -40,6 +28,7 @@ export class CreateStylistDto {
     description: 'Stylist password (8~32 characters)',
     type: String,
   })
+  @IsNotEmpty()
   @IsString()
   @MinLength(8)
   @MaxLength(32)
@@ -63,7 +52,7 @@ export class CreateStylistDto {
   })
   @IsOptional()
   @IsArray()
-  @IsIn(Object.values(Style), { each: true })
+  @IsEnum(Style, { each: true })
   specialtyStyles?: Style[];
 
   @ApiProperty({

@@ -20,7 +20,6 @@ export class StylistService {
   private getBasicStylistSelect(): StylistSelect {
     return {
       id: true,
-      email: true,
       name: true,
       rating: true,
       reviewCount: true,
@@ -72,6 +71,7 @@ export class StylistService {
   async findByEmail(email: string) {
     const stylist = await this.prisma.stylist.findUnique({
       where: { email },
+      select: { id: true, email: true, password: true },
     });
 
     if (!stylist) {
