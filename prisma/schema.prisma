@@ -84,12 +84,8 @@ model Stylist {
   isVerified      Boolean  @default(false) // 인증 상태
   introduction    String? // 소개글
   profileImageUrl String? // 프로필 이미지
-  <<<<<<< HEAD
   specialtyStyles Style[]  @default([]) // 전문 스타일 (배열)
   career          String[] @default([]) // 약력 (배열) - 선택사항
-  =======
-  specialtyStyles Style[] // 전문 스타일 (배열)
-  >>>>>>> 8fb188b5cfbf4d878f460afe12bda47104f2bf87
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -105,15 +101,9 @@ model Item {
   name                String // 이름
   category            ItemCategory // 카테고리
   imageUrl            String // 이미지 URL
-  <<<<<<< HEAD
   recommendedBodyType BodyType[]   @default([]) // 추천 체형 (배열)
   advice              String // 조언
   tags                String[]     @default([]) // 태그 (배열)
-  =======
-  recommendedBodyType BodyType[] // 추천 체형 (배열)
-  advice              String // 조언
-  tags                String[] // 태그 (배열)
-  >>>>>>> 8fb188b5cfbf4d878f460afe12bda47104f2bf87
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 

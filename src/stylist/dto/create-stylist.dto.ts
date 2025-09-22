@@ -56,6 +56,21 @@ export class CreateStylistDto {
   specialtyStyles?: Style[];
 
   @ApiProperty({
+    example: [
+      '서울대학교 의류학과 졸업',
+      'Vogue Korea 인턴 스타일리스트',
+      '현대백화점 VIP 스타일리스트 3년',
+    ],
+    description: 'Career history',
+    isArray: true,
+    required: false,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  career?: string[];
+
+  @ApiProperty({
     example: 'Professional fashion stylist with 5 years of experience.',
     description: 'Stylist introduction',
     required: false,

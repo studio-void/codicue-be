@@ -27,6 +27,7 @@ export class StylistService {
       introduction: true,
       profileImageUrl: true,
       specialtyStyles: true,
+      career: true,
       createdAt: true,
       updatedAt: true,
     };

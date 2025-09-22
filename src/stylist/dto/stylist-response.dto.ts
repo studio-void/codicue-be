@@ -55,6 +55,18 @@ export class StylistResponseDto {
   specialtyStyles: Style[];
 
   @ApiProperty({
+    description: '약력',
+    example: [
+      '서울대학교 의류학과 졸업',
+      'Vogue Korea 인턴 스타일리스트',
+      '현대백화점 VIP 스타일리스트 3년',
+      "개인 스타일링 브랜드 'StyleMe' 운영",
+    ],
+    isArray: true,
+  })
+  career: string[];
+
+  @ApiProperty({
     description: '생성일시',
     example: '2024-01-01T00:00:00.000Z',
   })
