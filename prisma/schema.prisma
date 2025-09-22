@@ -14,6 +14,78 @@ datasource db {
 }
 
 model User {
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  password       String
+  name           String
+  point          Int      @default(0)
+  preferredStyle Style[]  @default([]) // 추구하는 스타일 (배열)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  body         Body?          @relation
+  pointHistory PointHistory[]
+  chats        Chat[] // User가 참여한 채팅들
+  messages     Message[] // User가 보낸 메시지들
+  reviews      Review[] // User가 작성한 리뷰들
+  items        Item[] // User가 소유한 아이템들
+}
+
+model Body {
+  id               Int       @id @default(autoincrement())
+  userId           Int       @unique
+  height           Float // 키 (cm) - 필수
+  weight           Float // 몸무게 (kg) - 필수
+  shoulderWidth    Float? // 어깨넓이 (cm) - 선택
+  waistSize        Float? // 허리둘레 (cm) - 선택
+  legRatio         Float? // 다리 비율 (%) - 선택
+  recommendedStyle String? // 추천 스타일 - 선택
+  bodyType         BodyType? // 체형 종류 - 선택
+  summary          String? // 체형 한줄평 - 선택
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Stylist {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  password        String
+  name            String
+  rating          Float    @default(0) // 평균 별점
+  reviewCount     Int      @default(0) // 리뷰 개수
+  isVerified      Boolean  @default(false) // 인증 상태
+  introduction    String? // 소개글
+  profileImageUrl String? // 프로필 이미지
+  specialtyStyles Style[]  @default([]) // 전문 스타일 (배열)
+  career          String[] @default([]) // 약력 (배열) - 선택사항
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  chats    Chat[] // 스타일리스트가 참여한 채팅들
+  messages Message[] // 스타일리스트가 보낸 메시지들  
+  reviews  Review[] // 스타일리스트에 대한 리뷰들
+}
+
+model Item {
+  id                  Int          @id @default(autoincrement())
+  userId              Int // 소유자 ID
+  name                String // 이름
+  category            ItemCategory // 카테고리
+  imageUrl            String // 이미지 URL
+  recommendedBodyType BodyType[]   @default([]) // 추천 체형 (배열)
+  advice              String // 조언
+  tags                String[]     @default([]) // 태그 (배열)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Chat {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
