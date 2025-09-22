@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Style } from '@prisma/client';
 import {
   IsEmail,
   IsNotEmpty,
   IsString,
   MaxLength,
   MinLength,
-  IsBoolean,
   IsOptional,
+  IsArray,
+  IsNumber,
+  IsEnum,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -41,13 +44,32 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({
-    example: false,
-    type: Boolean,
-    description: 'Is admin user',
+    example: 170.5,
+    description: 'Height in centimeters',
+    type: Number,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  height: number;
+
+  @ApiProperty({
+    example: 65.2,
+    description: 'Weight in kilograms',
+    type: Number,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  weight: number;
+
+  @ApiProperty({
+    example: ['MINIMAL', 'CASUAL'],
+    description: 'Preferred fashion styles',
+    enum: Style,
+    isArray: true,
     required: false,
-    default: false,
   })
   @IsOptional()
-  @IsBoolean()
-  isAdmin: boolean = false;
+  @IsArray()
+  @IsEnum(Style, { each: true })
+  preferredStyle?: Style[];
 }

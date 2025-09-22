@@ -2,12 +2,12 @@ export interface Payload {
   id: number;
   email: string;
   name: string;
-  isAdmin: boolean;
+  userType: 'user' | 'stylist';
 }
 
 export interface Validated {
   id: number;
   email: string;
   name: string;
-  isAdmin: boolean;
+  userType: 'user' | 'stylist';
 }
