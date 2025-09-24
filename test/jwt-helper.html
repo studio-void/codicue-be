@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JWT Token Helper</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .input-group {
+        margin-bottom: 10px;
+      }
+      label {
+        display: inline-block;
+        width: 100px;
+        font-weight: bold;
+      }
+      input,
+      button,
+      textarea {
+        padding: 8px;
+        margin: 5px;
+      }
+      input[type='text'],
+      input[type='email'],
+      input[type='password'] {
+        width: 200px;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        font-family: monospace;
+      }
+      button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JWT Token Helper</h1>
+
+    <div class="container">
+      <h3>사용자 로그인</h3>
+      <div class="input-group">
+        <label>이메일:</label>
+        <input type="email" id="userEmail" placeholder="사용자 이메일" />
+      </div>
+      <div class="input-group">
+        <label>비밀번호:</label>
+        <input type="password" id="userPassword" placeholder="비밀번호" />
+      </div>
+      <button onclick="loginUser()">사용자 로그인</button>
+      <div id="userResult"></div>
+    </div>
+
+    <div class="container">
+      <h3>스타일리스트 로그인</h3>
+      <div class="input-group">
+        <label>이메일:</label>
+        <input
+          type="email"
+          id="stylistEmail"
+          placeholder="스타일리스트 이메일"
+        />
+      </div>
+      <div class="input-group">
+        <label>비밀번호:</label>
+        <input type="password" id="stylistPassword" placeholder="비밀번호" />
+      </div>
+      <button onclick="loginStylist()">스타일리스트 로그인</button>
+      <div id="stylistResult"></div>
+    </div>
+
+    <div class="container">
+      <h3>JWT 토큰</h3>
+      <textarea
+        id="jwtToken"
+        placeholder="JWT 토큰이 여기에 표시됩니다..."
+        readonly
+      ></textarea>
+      <br />
+      <button onclick="copyToken()">토큰 복사</button>
+      <button onclick="openWebSocketTest()">WebSocket 테스트 열기</button>
+    </div>
+
+    <script>
+      const API_BASE = 'http://localhost:3000';
+
+      async function loginUser() {
+        const email = document.getElementById('userEmail').value;
+        const password = document.getElementById('userPassword').value;
+        const resultDiv = document.getElementById('userResult');
+
+        if (!email || !password) {
+          resultDiv.innerHTML =
+            '<span class="error">이메일과 비밀번호를 입력해주세요.</span>';
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            document.getElementById('jwtToken').value = data.accessToken;
+            resultDiv.innerHTML = '<span class="success">로그인 성공!</span>';
+          } else {
+            resultDiv.innerHTML = `<span class="error">로그인 실패: ${data.message}</span>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<span class="error">네트워크 오류: ${error.message}</span>`;
+        }
+      }
+
+      async function loginStylist() {
+        const email = document.getElementById('stylistEmail').value;
+        const password = document.getElementById('stylistPassword').value;
+        const resultDiv = document.getElementById('stylistResult');
+
+        if (!email || !password) {
+          resultDiv.innerHTML =
+            '<span class="error">이메일과 비밀번호를 입력해주세요.</span>';
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/auth/stylist/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            document.getElementById('jwtToken').value = data.accessToken;
+            resultDiv.innerHTML = '<span class="success">로그인 성공!</span>';
+          } else {
+            resultDiv.innerHTML = `<span class="error">로그인 실패: ${data.message}</span>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<span class="error">네트워크 오류: ${error.message}</span>`;
+        }
+      }
+
+      function copyToken() {
+        const tokenTextarea = document.getElementById('jwtToken');
+        tokenTextarea.select();
+        tokenTextarea.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(tokenTextarea.value);
+        alert('토큰이 클립보드에 복사되었습니다!');
+      }
+
+      function openWebSocketTest() {
+        // 같은 디렉토리의 websocket-test.html 열기
+        window.open('./websocket-test.html', '_blank');
+      }
+    </script>
+  </body>
+</html>

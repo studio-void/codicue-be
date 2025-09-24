@@ -71,7 +71,7 @@ export class ChatController {
   }
 
   @ApiOperation({
-    summary: '채팅방 생성',
+    summary: '채팅방 생성 또는 재방문',
     description:
       '스타일리스트와의 새로운 채팅방을 생성하거나 기존 채팅방을 반환합니다.',
   })
